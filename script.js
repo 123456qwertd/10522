@@ -35,11 +35,11 @@ function calculate() {
   ctx.stroke();
 
   // ⑤ 축 이름
-  ctx.font = "14px Arial";
-  ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - 10);
+  ctx.font = "16px Arial";
+  ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - padding + 20);
 
   ctx.save();
-  ctx.translate(15, canvas.height / 2 + 40);
+  ctx.translate(20, canvas.height / 2 - 20); // y축 이름 위치 조정
   ctx.rotate(-Math.PI / 2);
   ctx.fillText("피보나치 수 F(n)", 0, 0);
   ctx.restore();
@@ -50,18 +50,28 @@ function calculate() {
     ctx.fillText(i + 1, x - 3, canvas.height - padding + 15);
   }
 
-  // ⑦ y축 눈금
-  for (let i = 0; i <= 5; i++) {
-    let value = Math.round((maxValue / 5) * i);
+  // ⑦ y축 눈금 자동 조절
+  let yTicks;
+  if (n <= 5) {
+    yTicks = 5;
+  } else if (n <= 15) {
+    yTicks = 10;
+  } else {
+    yTicks = 15;
+  }
+
+  ctx.font = "12px Arial"; // 눈금 글자 크기 조절
+  for (let i = 0; i <= yTicks; i++) {
+    let value = Math.round((maxValue / yTicks) * i);
     let y = canvas.height - padding - (value / maxValue) * graphHeight;
-    if (y < padding) y = padding; // 최대값 보정
+    if (y < padding) y = padding;
     ctx.fillText(value, 5, y + 3);
   }
 
   // ⑧ 그래프 선
   ctx.beginPath();
   ctx.strokeStyle = "blue";
-  ctx.lineWidth = 3; // 선 굵기 증가
+  ctx.lineWidth = 3; // 선 굵기
 
   fib.forEach((value, index) => {
     let x = padding + (index / (n - 1)) * graphWidth;
