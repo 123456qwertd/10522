@@ -21,7 +21,7 @@ function calculate() {
   // ③ 그래프 초기화
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const padding = 60; // 글자 여백 확보
+  const padding = 70; // 글자 여유 확보
   const graphWidth = canvas.width - padding * 2;
   const graphHeight = canvas.height - padding * 2;
 
@@ -36,11 +36,11 @@ function calculate() {
 
   // ⑤ x축 이름
   ctx.font = "14px Arial";
-  ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - padding + 30);
+  ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - padding + 35);
 
   // ⑥ y축 이름
   ctx.save();
-  ctx.translate(15, canvas.height / 2); // 충분히 왼쪽으로
+  ctx.translate(20, canvas.height / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillText("피보나치 수 F(n)", 0, 0);
   ctx.restore();
@@ -62,7 +62,10 @@ function calculate() {
     let value = Math.round((maxValue / yTicks) * i);
     let y = canvas.height - padding - (value / maxValue) * graphHeight;
     if (y < padding) y = padding;
-    ctx.fillText(value, 45, y + 3); // y축 이름과 겹치지 않도록 x좌표 이동
+
+    // 숫자 길이에 따라 x좌표 조정
+    let xPos = 50 - value.toString().length * 3; // 숫자가 길면 왼쪽으로 이동
+    ctx.fillText(value, xPos, y + 3);
   }
 
   // ⑨ 그래프 선 그리기
