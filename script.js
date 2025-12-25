@@ -9,30 +9,32 @@ function calculate() {
     return;
   }
 
-  // ① 반복 알고리즘으로 피보나치 수열 계산
+  // ① 피보나치 수열 계산 (반복 알고리즘)
   let fib = [0, 1];
   for (let i = 2; i < n; i++) {
     fib[i] = fib[i - 1] + fib[i - 2];
   }
 
+  // ② 텍스트 결과 출력
   result.textContent = fib.join(", ");
 
-  // ② 그래프 초기화
+  // ③ 그래프 초기화
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const padding = 50;
   const graphWidth = canvas.width - padding * 2;
   const graphHeight = canvas.height - padding * 2;
+
   const maxValue = Math.max(...fib);
 
-  // ③ 축 그리기
+  // ④ 축 그리기
   ctx.beginPath();
   ctx.moveTo(padding, padding);
   ctx.lineTo(padding, canvas.height - padding);
   ctx.lineTo(canvas.width - padding, canvas.height - padding);
   ctx.stroke();
 
-  // ④ 축 이름
+  // ⑤ 축 이름
   ctx.font = "14px Arial";
   ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - 10);
 
@@ -42,27 +44,29 @@ function calculate() {
   ctx.fillText("피보나치 수 F(n)", 0, 0);
   ctx.restore();
 
-  // ⑤ x축 눈금
+  // ⑥ x축 눈금
   for (let i = 0; i < n; i++) {
     let x = padding + (i / (n - 1)) * graphWidth;
     ctx.fillText(i + 1, x - 3, canvas.height - padding + 15);
   }
 
-  // ⑥ y축 눈금
+  // ⑦ y축 눈금
   for (let i = 0; i <= 5; i++) {
     let value = Math.round((maxValue / 5) * i);
     let y = canvas.height - padding - (value / maxValue) * graphHeight;
+    if (y < padding) y = padding; // 최대값 보정
     ctx.fillText(value, 5, y + 3);
   }
 
-  // ⑦ 그래프 선 그리기
+  // ⑧ 그래프 선
   ctx.beginPath();
   ctx.strokeStyle = "blue";
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 3; // 선 굵기 증가
 
   fib.forEach((value, index) => {
     let x = padding + (index / (n - 1)) * graphWidth;
     let y = canvas.height - padding - (value / maxValue) * graphHeight;
+    if (y < padding) y = padding; // 최대값 보정
     if (index === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
   });
