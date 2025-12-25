@@ -21,7 +21,7 @@ function calculate() {
   // ③ 그래프 초기화
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const padding = 50;
+  const padding = 60; // 글자 여백 확보
   const graphWidth = canvas.width - padding * 2;
   const graphHeight = canvas.height - padding * 2;
 
@@ -34,49 +34,46 @@ function calculate() {
   ctx.lineTo(canvas.width - padding, canvas.height - padding);
   ctx.stroke();
 
-  // ⑤ 축 이름
-  ctx.font = "16px Arial";
-  ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - padding + 20);
+  // ⑤ x축 이름
+  ctx.font = "14px Arial";
+  ctx.fillText("항 번호 (n)", canvas.width / 2 - 30, canvas.height - padding + 30);
 
+  // ⑥ y축 이름
   ctx.save();
-  ctx.translate(20, canvas.height / 2 - 20); // y축 이름 위치 조정
+  ctx.translate(15, canvas.height / 2); // 충분히 왼쪽으로
   ctx.rotate(-Math.PI / 2);
   ctx.fillText("피보나치 수 F(n)", 0, 0);
   ctx.restore();
 
-  // ⑥ x축 눈금
+  // ⑦ x축 눈금 (항 번호)
+  ctx.font = "12px Arial";
   for (let i = 0; i < n; i++) {
     let x = padding + (i / (n - 1)) * graphWidth;
-    ctx.fillText(i + 1, x - 3, canvas.height - padding + 15);
+    ctx.fillText(i + 1, x - 5, canvas.height - padding + 20);
   }
 
-  // ⑦ y축 눈금 자동 조절
+  // ⑧ y축 눈금 자동 조절
   let yTicks;
-  if (n <= 5) {
-    yTicks = 5;
-  } else if (n <= 15) {
-    yTicks = 10;
-  } else {
-    yTicks = 15;
-  }
+  if (n <= 5) yTicks = 5;
+  else if (n <= 15) yTicks = 10;
+  else yTicks = 15;
 
-  ctx.font = "12px Arial"; // 눈금 글자 크기 조절
   for (let i = 0; i <= yTicks; i++) {
     let value = Math.round((maxValue / yTicks) * i);
     let y = canvas.height - padding - (value / maxValue) * graphHeight;
     if (y < padding) y = padding;
-    ctx.fillText(value, 5, y + 3);
+    ctx.fillText(value, 45, y + 3); // y축 이름과 겹치지 않도록 x좌표 이동
   }
 
-  // ⑧ 그래프 선
+  // ⑨ 그래프 선 그리기
   ctx.beginPath();
   ctx.strokeStyle = "blue";
-  ctx.lineWidth = 3; // 선 굵기
+  ctx.lineWidth = 3;
 
   fib.forEach((value, index) => {
     let x = padding + (index / (n - 1)) * graphWidth;
     let y = canvas.height - padding - (value / maxValue) * graphHeight;
-    if (y < padding) y = padding; // 최대값 보정
+    if (y < padding) y = padding;
     if (index === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
   });
